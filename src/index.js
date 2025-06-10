@@ -24,6 +24,7 @@ function draw() {
   background(BACKGROUND);
 
   // this is all 0s until the sound plays
+  // https://p5js.org/reference/p5.sound/p5.FFT/
   const spectrum = fft.analyze();
 
   for (let i = 0; i < spectrum.length; i += 1) {
