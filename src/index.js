@@ -4,20 +4,12 @@ const BACKGROUND = 'plum';
 let birdSound;
 let fft;
 
-let mic;
-
 function preload() {
   birdSound = loadSound(AUDIO_FILE);
 }
 
 function setup() {
-  cnv = createCanvas(windowWidth * 0.9, windowHeight * 0.75);
-  cnv.mousePressed(userStartAudio)
-
-  mic = new p5.AudioIn();
-  mic.start();
-
-  getAudioContext().suspend()
+  createCanvas(windowWidth * 0.9, windowHeight * 0.75);
 
   fft = new p5.FFT();
 }
@@ -39,62 +31,45 @@ function draw() {
 
   // this is all 0s until the sound plays
   // https://p5js.org/reference/p5.sound/p5.FFT/
-  // const spectrum = fft.analyze();
+  const frequencySpectrum = fft.analyze();
 
-  // beginShape();
-  // noFill();
+  const center = { x: width / 2, y: height / 2 };
+  const radius = 100;
 
-  let micLevel = mic.getLevel();
-  let y = map(micLevel, 0, 1, 0, height * 2000);
-  // console.debug({ y });
-  // ellipse(width / 2, y, 10, 10);
-  circle(width / 2, y, 10);
+  for (let i = 0; i < frequencySpectrum.length; i += 1) {
+    const amplitudeAtCurrentFrequency = frequencySpectrum[i];
 
-// text(getAudioContext().state, width/2, height/2);
+    // QUESTION: how do I make flip this upside down?
+    const x = map(i, 0, frequencySpectrum.length, 0, width);
+    const y = (height - 2 * amplitudeAtCurrentFrequency) / 2;
 
-  // for (let i = 0; i < spectrum.length; i += 1) {
-  //   const amplitudeAtCurrentFrequency = spectrum[i];
+    push();
 
-  //   // QUESTION: how do I make flip this upside down?
-  //   const x = map(i, 0, spectrum.length, 0, width);
-  //   console.debug({ x, i, pitch: amplitudeAtCurrentFrequency })
+    // noStroke();
+    // ellipse(x, height / 2, 10, pitch * 2)
 
-  //   push();
-
-  //   // noStroke();
-  //   // fill(pitch);
-  //   // ellipse(x, y, w, h)
-  //   // fill('red')
-  //   // ellipse(x, height / 2, 10, pitch * 2)
-
-  //   fill('yellow')
-
-  //   circle(x, (height - 2 * amplitudeAtCurrentFrequency) / 2, 1)
-  //   // strokeWeight(4)
-  //   // vertex(x, y)
-  //   pop();
-  // }
-
-  // endShape(CLOSE);
+    circle(x, y, 1);
+    pop();
+  }
 }
 
 function mousePressed() {
-  // togglePlay();
+  togglePlay();
 }
 
 function keyPressed() {
   // space
-  // if (keyCode === 32) {
-  //   togglePlay();
-  // }
+  if (keyCode === 32) {
+    togglePlay();
+  }
 }
 
 /// custom
 
 function togglePlay() {
-  // if (birdSound.isPlaying()) {
-  //   birdSound.pause();
-  // } else {
-  //   birdSound.loop();
-  // }
+  if (birdSound.isPlaying()) {
+    birdSound.pause();
+  } else {
+    birdSound.loop();
+  }
 }
