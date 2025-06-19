@@ -45,7 +45,7 @@ function draw() {
   // noFill();
 
   let micLevel = mic.getLevel();
-  let y = map(micLevel, 0, 1, 0, height * 1000);
+  let y = map(micLevel, 0, 1, 0, height * 2000);
   // console.debug({ y });
   // ellipse(width / 2, y, 10, 10);
   circle(width / 2, y, 10);
